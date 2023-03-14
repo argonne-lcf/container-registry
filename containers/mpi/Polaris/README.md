@@ -1,7 +1,7 @@
-# MPICH ON Polaris
+# MPI on Polaris using Singularity
 
 # Building a mpich image on Polaris
-To build a mpich image on Polaris, you will have to first land on a compute node in interactive mode and then you can use the mpich.def file found in this repo.
+To build a mpich image on Polaris, you will have to first secure a compute node in interactive mode and then you can use the `mpich.def` file found in this repo.
 
 ```bash
 qsub -I -A <project_name> -q <queue> -l select=1 -l walltime=60:00 -l singularity_fakeroot=true -l filesystems=home:eagle:grand
@@ -16,7 +16,7 @@ Ensure your mpich is dynamically built. This is achieved by setting the '--disab
 
 # Running the mpich image
 
-To run a container on Polaris you can either use the submission script described in this repo. Or in the compute node set the following variables in order for container mpich to bind to system mpich
+To run a container on Polaris you can either use the submission script (`job_submission.sh`) described in this repo. Or in the compute node set the following variables in order for container mpich to bind to system mpich
 
 
 ```bash
