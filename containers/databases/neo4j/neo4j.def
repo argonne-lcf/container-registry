@@ -1,0 +1,13 @@
+Bootstrap: docker
+From: neo4j:latest
+
+%environment
+export NEO4JLABS_PLUGINS='["graph-data-science"]'
+export NEO4J_AUTH='none'
+
+%post
+apt-get update && apt-get install apt-file -y && apt-file update && apt-get install vim -y
+sed -i 's/7474/7475/g' /var/lib/neo4j/conf/neo4j.conf
+
+%startscript
+exec neo4j "$@"

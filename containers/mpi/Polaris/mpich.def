@@ -1,0 +1,28 @@
+bootstrap: docker
+From: ubuntu:20.04
+
+%environment
+ export PATH=$PATH:/mpich/install/bin
+ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/mpich/install/lib
+
+%files
+ source/* /usr/source/
+ build_mpich.sh /usr/
+
+%post
+ DEBIAN_FRONTEND=noninteractive
+ apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive \
+ && apt-get install -y build-essential libfabric-dev libibverbs-dev gfortran wget \
+ && apt-get install -y python3 python3-distutils python3-pip gcc
+ chmod +x /usr/build_mpich.sh
+ /usr/build_mpich.sh
+
+%labels
+ MAINTAINER Aditya atanikanti@anl.gov
+
+%help
+ This is container is used to illustrate a mpi based def file to build a container running python and c programs
+
+
+
