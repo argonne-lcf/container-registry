@@ -13,3 +13,10 @@ singularity remote add oras://ghcr.io #do this once
 singularity push IMAGE_NAME oras://ghcr.io/NAMESPACE/IMAGE_NAME:latest
 ```
 4. Make your images public by heading to the [packages](https://github.com/orgs/argonne-lcf/packages) page, clicking on your image and adjusting visibility in package settings
+
+5. To pull from this repository
+
+```bash
+singularity pull oras://ghcr.io/argonne-lcf/IMAGE_NAME:latest
+```
+
