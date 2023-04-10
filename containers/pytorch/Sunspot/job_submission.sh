@@ -2,7 +2,7 @@
 #PBS -l select=2:system=sunspot
 #PBS -q workq
 #PBS -l place=scatter
-#PBS -l walltime=0:30:00
+#PBS -l walltime=01:00:00
 #PBS -A Aurora_deployment
 
 cd ${PBS_O_WORKDIR}
@@ -12,6 +12,7 @@ echo $CONTAINER
 module load spack
 module load apptainer
 module load squashfuse
+module load fuse-overlayfs
 export HTTP_PROXY=http://proxy.alcf.anl.gov:3128
 export HTTPS_PROXY=http://proxy.alcf.anl.gov:3128
 export http_proxy=http://proxy.alcf.anl.gov:3128
