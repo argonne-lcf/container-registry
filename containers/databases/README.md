@@ -1,4 +1,11 @@
 # Databases
+
+To build images on compute node you will have to set the singularity_fakeroot flag to true.
+
+```bash
+qsub -I -A <project_name> -q debug -l select=1 -l walltime=60:00 -l singularity_fakeroot=true -l filesystems=home:eagle:grand
+```
+
 We provide singularity containers and steps to interact with database containers on Polaris. To use this you will have to load singularity module and set the proxy.
 ```bash
 module load singularity
@@ -6,12 +13,6 @@ export HTTP_PROXY=http://proxy.alcf.anl.gov:3128
 export HTTPS_PROXY=http://proxy.alcf.anl.gov:3128
 export http_proxy=http://proxy.alcf.anl.gov:3128
 export https_proxy=http://proxy.alcf.anl.gov:3128
-```
-
-To build images on compute node you will have to set the singularity_fakeroot flag to true.
-
-```bash
-qsub -I -A <project_name> -q debug -l select=1 -l walltime=60:00 -l singularity_fakeroot=true -l filesystems=home:eagle:grand
 ```
 
 ## Mongo DB
@@ -117,3 +118,37 @@ There may be a short delay until the server is ready.
 ```bash
 export PORT=7475 export PORT1=7687; ssh -L "localhost:${PORT}:localhost:${PORT}" -L "localhost:${PORT1}:localhost:${PORT1}" <username>@<polaris-login-01>.alcf.anl.gov
 ```
+
+## PostgreSQL
+PostgreSQL also known as Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance.
+
+### How to use Postgres on Polaris
+1. 1. Pull container from Argonne GitHub container registry
+```bash
+singularity pull oras://ghcr.io/argonne-lcf/postgres:latest
+```
+
+2. Create a data and logs directory to bind to the running container
+```bash
+mkdir -p $PWD/data
+```
+
+3. Create a persistent overlay for the container. A persistent overlay is a directory or file system image that “sits on top” of your immutable SIF container. When you install new software or create and modify files the overlay will store the changes.
+```bash
+singularity overlay create --size 1024 overlay.img #Do this once
+```
+
+4. Run the container
+```bash
+singularity instance start --bind $PWD/data:/var/lib/postgresql/data --overlay overlay.img postgres_latest.sif postgres
+INFO:    instance started successfully
+singularity instance list
+```
+
+5. To run a sample code to connect to POSTGRES. You can refer to the [databases/postgres_test.py](postgres_test.py)
+```bash
+module load conda
+pip install -r databases/requirements.txt
+python3 databases/postgres_test.py
+```
+

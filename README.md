@@ -9,7 +9,8 @@ To add to this registry follow these steps (Only for ALCF Github members):
 
 ```bash
 module load singularity
-singularity remote add oras://ghcr.io #do this once
+singularity remote add oras oras://ghcr.io #do this once and skip token
+singularity remote login --username <username> oras://ghcr.io/ #do this once and paste the token created from step 1.
 singularity push IMAGE_NAME oras://ghcr.io/NAMESPACE/IMAGE_NAME:latest
 ```
 4. Make your images public by heading to the [packages](https://github.com/orgs/argonne-lcf/packages) page, clicking on your image and adjusting visibility in package settings
