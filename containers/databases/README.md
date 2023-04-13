@@ -145,7 +145,7 @@ INFO:    instance started successfully
 singularity instance list
 ```
 
-5. To run a sample code to connect to POSTGRES. You can refer to the [databases/postgres_test.py](postgres_test.py)
+5. To run a sample code to connect to POSTGRES. You can refer to the [postgres/postgres_test.py](postges_test.py) file
 ```bash
 module load conda
 pip install -r databases/requirements.txt
