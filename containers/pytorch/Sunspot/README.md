@@ -2,7 +2,7 @@
 
 ## Running mpich image on Sunspot
 
-To scale pytorch on Sunspot you can either use the [intel-optimized-pytorch.def](intel-optimized-pytorch.def) def file which is built from [intel optimized pytorch image](https://hub.docker.com/r/intel/intel-optimized-pytorch) and customized mpich-4 or just use `apptainer pull oras://ghcr.io/argonne-lcf/intel-optimized-pytorch-with-mpich:latest`.
+To scale pytorch on Sunspot you can either use the [intel-optimized-pytorch-with-mpich.def](intel-optimized-pytorch-with-mpich.def) def file which is built from [intel optimized pytorch image](https://hub.docker.com/r/intel/intel-optimized-pytorch) and custom [mpich-4](build_mpich.sh) or just use `apptainer pull oras://ghcr.io/argonne-lcf/intel-optimized-pytorch-with-mpich:latest`.
 
 ```bash
 qsub -l select=2 -l walltime=00:30:00 -A Aurora_deployment -q workq -I
@@ -19,12 +19,11 @@ apptainer build --fakeroot intel-optimized-pytorch-with-mpich.sif intel-optimize
 #or apptainer pull oras://ghcr.io/argonne-lcf/intel-optimized-pytorch-with-mpich:latest
 ```
 
-To run the image, you will need the [mpich_libraries](mpich_libraries) folder found in this repository. You can use [job submission script](job_submission.sh) to run the
+To run the image, you will need the [mpich_libraries](mpich_libraries) folder found in this repository. You can use the [job submission script](job_submission.sh) as a working example.
 
 ```bash
 qsub -v CONTAINER=intel-optimized-pytorch-with-mpich_latest.sif job_submission.sh
 ```
-
  
 
 
