@@ -35,7 +35,7 @@ mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN apptainer exec -B /opt -B /s
 echo Pytorch Test
 mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN apptainer exec -B /opt -B /soft -B $PWD --writable-tmpfs $CONTAINER python3 $PWD/source/pytorch_test.py
 
-echo Python MNIST
-mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN apptainer exec -B /opt -B /soft -B $PWD --writable-tmpfs $CONTAINER python3 $PWD/source/pytorch_mnist.py
+#echo Python MNIST
+#mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN apptainer exec -B /opt -B /soft -B $PWD --writable-tmpfs $CONTAINER python3 $PWD/source/pytorch_mnist.py
 
 
