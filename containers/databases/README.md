@@ -196,7 +196,7 @@ singularity run instance://mysql
 >source ~/envs/pymongo_env/bin/activate
 >pip install -r databases/requirements.txt
 >python3 $PWD/mysql_test.py
-
+```
 
 6. When done, stop the MySQL container instance.
 
