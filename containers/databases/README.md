@@ -1,6 +1,7 @@
 # Databases
 
-To build images on compute node you will have to set the singularity_fakeroot flag to true.
+Two ways to use databases on Polaris, you can either pull an image from a repository or build images from scratch on a compute node.
+For the latter you will need a .def file and land on a compute node by setting the singularity_fakeroot flag to true.
 
 ```bash
 qsub -I -A <project_name> -q debug -l select=1 -l walltime=60:00 -l singularity_fakeroot=true -l filesystems=home:eagle:grand
@@ -9,6 +10,7 @@ qsub -I -A <project_name> -q debug -l select=1 -l walltime=60:00 -l singularity_
 We provide singularity containers and steps to interact with database containers on Polaris. To use this you will have to load singularity module and set the proxy.
 ```bash
 module load singularity
+#For compute nodes set proxy variable
 export HTTP_PROXY=http://proxy.alcf.anl.gov:3128
 export HTTPS_PROXY=http://proxy.alcf.anl.gov:3128
 export http_proxy=http://proxy.alcf.anl.gov:3128
@@ -54,6 +56,7 @@ Pymongo is the Python client/library to connect to a running mongodb. Query and 
 
 ```bash
 > module load conda
+> conda activate base #do this once
 > python3 -m venv ~/envs/mongoenv #do this once
 > source ~/envs/mongoenv/bin/activate
 > python3
@@ -123,7 +126,7 @@ export PORT=7475 export PORT1=7687; ssh -L "localhost:${PORT}:localhost:${PORT}"
 PostgreSQL also known as Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance.
 
 ### How to use Postgres on Polaris
-1. 1. Pull container from Argonne GitHub container registry
+1. Pull container from Argonne GitHub container registry
 ```bash
 singularity pull oras://ghcr.io/argonne-lcf/postgres:latest
 ```
@@ -147,8 +150,57 @@ singularity instance list
 
 5. To run a sample code to connect to POSTGRES. You can refer to the [postgres_test.py](postgres/postgres_test.py) file
 ```bash
-module load conda
-pip install -r databases/requirements.txt
-python3 databases/postgres_test.py
+>module load conda
+>conda activate base #do this once
+>python3 -m venv ~/envs/postgres_env # do this once
+>source ~/envs/postgres_env/bin/activate
+>pip install -r $PWD/requirements.txt
+>python3 $PWD/postgres_test.py
+```
+## MYSQL
+MySQL is an open-source relational database management system
+
+### How to use MySQL on Polaris
+1. Pull container from Dockerhub
+```bash
+singularity pull --name mysql.simg docker://mysql
+```
+
+2. Create local directories for MySQL. These will be bind-mounted into the container and allow other containers to connect to the database via a local socket as well as for the database to be stored on the host filesystem and thus persist between container instances.
+
+```bash
+mkdir -p ${PWD}/mysql/var/lib/mysql ${PWD}/mysql/run/mysqld
+```
+
+3. Set the root password for mysql using the environment variable Start the singularity instance for the MySQL server
+
+```bash
+export MYSQL_ROOT_PASSWORD=mysecretpw
+singularity instance.start --bind ${HOME} \
+    --bind ${PWD}/mysql/var/lib/mysql/:/var/lib/mysql \
+    --bind ${PWD}/mysql/run/mysqld:/run/mysqld \
+    ./mysql.simg mysql
+```
+
+4. Run the container startscript to initialize and start the MySQL server. Note that initialization is only done the first time and the script will automatically skip initialization if it is not needed. This command must be run each time the MySQL server is needed (e.g., each time the container is spun-up to provide the MySQL server).
+
+```bash
+singularity run instance://mysql
+```
+
+5. Ensure you open a new terminal and ssh to the same node or use the ipaddress to connect to the node where the MySQL instance is running. A sample code to connect to MySQL, refer to the [mysql_test.py](mysql/mysql_test.py) file. Below are steps to run a python script to connect to a running MySQL instance. 
+```bash
+>module load conda
+>conda activate base #do this once
+>python3 -m venv ~/envs/mysql_env # do this once
+>source ~/envs/pymongo_env/bin/activate
+>pip install -r databases/requirements.txt
+>python3 $PWD/mysql_test.py
+
+
+6. When done, stop the MySQL container instance.
+
+```bash
+singularity instance.stop mysql
 ```
 
