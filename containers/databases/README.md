@@ -176,7 +176,7 @@ mkdir -p ${PWD}/mysql/var/lib/mysql ${PWD}/mysql/run/mysqld
 
 ```bash
 export MYSQL_ROOT_PASSWORD=mysecretpw
-singularity instance.start --bind ${HOME} \
+singularity instance start --bind ${HOME} \
     --bind ${PWD}/mysql/var/lib/mysql/:/var/lib/mysql \
     --bind ${PWD}/mysql/run/mysqld:/run/mysqld \
     ./mysql.simg mysql

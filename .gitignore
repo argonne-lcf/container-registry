@@ -2,3 +2,6 @@
 *.simg
 *.img
 data/
+output/
+outputs/
+CosmicTagger/

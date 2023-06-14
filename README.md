@@ -1,5 +1,14 @@
-# container-registry
-To add to this registry follow these steps (Only for ALCF Github members):
+# CONTAINER REGISTRY
+
+## TABLE OF CONTENTS
+
+1. [Databases](containers/databases): Container scripts to launch mongo, mysql, neo4j or postgres
+2. [mpich](containers/mpi): Container scripts to run mpich codes
+3. [datascience](containers/datascience): Container scripts to run tensorflow, pytorch, horovod
+4. [shpc](containers/shpc): Singularity Registry HPC (shpc) allows you to install containers as modules
+
+## CONTRIBUTIONS
+To contribute to this registry follow these steps (Only for ALCF Github members):
 
 1. Create a personal access token on GitHub by following steps from this [link] (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). Ensure you check the repo dropdown checklist
 

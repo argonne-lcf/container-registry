@@ -1,0 +1,30 @@
+bootstrap: docker
+From: nvcr.io/nvidia/tensorflow:23.05-tf2-py3
+
+%environment
+ export PATH=$PATH:/mpich/install/bin
+ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/mpich/install/lib
+
+%files
+ source/* /usr/source/
+ build_mpich_3.sh /usr/
+ requirements.txt /usr/
+
+%post
+ rm -rf /opt/hpcx
+ DEBIAN_FRONTEND=noninteractive
+ apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential libfabric-dev libibverbs-dev gfortran wget gcc git software-properties-common libev-libevent-dev \
+ && add-apt-repository ppa:deadsnakes/ppa \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9 python3.9-dev python3.9-venv python3.8-venv python3-pip python3-distutils \
+ && apt-get update -y \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+ chmod +x /usr/build_mpich_3.sh
+ /usr/build_mpich_3.sh
+
+%labels
+ MAINTAINER Aditya atanikanti@anl.gov
+
+%help
+ This is container which has installations of nvidia libraries and tensorflow. It has been modified to dynamically link with Cray mpich for multi node runs on Polaris supercomputer.
