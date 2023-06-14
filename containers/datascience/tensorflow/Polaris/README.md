@@ -9,7 +9,7 @@ module load singularity
 singularity pull oras://ghcr.io/argonne-lcf/tf2-py3-nvidia-gpu:latest
 ```
 
-2. To run a container on Polaris you can either use the [submission script](Polaris/job_submission.sh) described in this repo. Alternatively, in interactive mode on the compute node set the following variables in order for container mpich to bind to system mpich
+2. To run a container on Polaris you can either use the [submission script](job_submission.sh) described in this repo. Alternatively, in interactive mode on the compute node set the following variables in order for container mpich to bind to system mpich
 
 ```bash
 qsub -l select=2 -l walltime=00:30:00 -A <project> -q debug -l singularity_fakeroot=true -l filesystems=home:grand -I
@@ -50,7 +50,7 @@ echo "NUM_OF_NODES= ${NNODES} TOTAL_NUM_RANKS= ${PROCS} RANKS_PER_NODE= ${PPN}"
 mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN singularity exec -B /opt/nvidia -B /var/run/palsd/ -B /opt/cray/pe -B /opt/cray/libfabric $CONTAINER python3 CosmicTagger/bin/exec.py --config-name a21 framework=tensorflow run.id=test-1 run.compute_mode=CPU run.distributed=True run.precision="float32" run.minibatch_size=2 run.iterations=20
 ```
 
-5. To build a container from scratch you can use the [tf2-mpich-nvidia-gpu.def](Polaris/tf2-mpich-nvidia-gpu.def) file followed by singularity build --fakeroot on a compute node
+5. To build a container from scratch you can use the [tf2-mpich-nvidia-gpu.def](tf2-mpich-nvidia-gpu.def) file followed by singularity build --fakeroot on a compute node
 
 ```bash
 qsub -l select=1 -l walltime=00:30:00 -A <project> -q debug -l singularity_fakeroot=true -l filesystems=home:grand -I
@@ -60,5 +60,5 @@ export HTTP_PROXY=http://proxy.alcf.anl.gov:3128
 export HTTPS_PROXY=http://proxy.alcf.anl.gov:3128
 export http_proxy=http://proxy.alcf.anl.gov:3128
 export https_proxy=http://proxy.alcf.anl.gov:3128
-singularity build --fakeroot tf2-py3-nvidia-gpu.sif tf2-py3-nvidia-gpu.def
+singularity build --fakeroot tf2-mpich-nvidia-gpu.sif tf2-mpich-nvidia-gpu.def
 ```
