@@ -6,7 +6,7 @@
 
 ```bash
 module load singularity
-singularity pull oras://ghcr.io/argonne-lcf/tf2-py3-nvidia-gpu:latest
+singularity pull oras://ghcr.io/argonne-lcf/tf2-mpich-nvidia-gpu:latest
 ```
 
 2. To run a container on Polaris you can either use the [submission script](job_submission.sh) described in this repo. Alternatively, in interactive mode on the compute node set the following variables in order for container mpich to bind to system mpich
