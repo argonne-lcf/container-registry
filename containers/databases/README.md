@@ -148,12 +148,17 @@ mkdir pgdata
 mkdir pgrun
 ```
 
-4. Run the container
+4. Start an instance of the container
 ```bash
-singularity run -B pgdata:/var/lib/postgresql/data -B pgrun:/var/run/postgresql -e -C --env-file pg.env postgres.simg
+singularity instance start -B pgdata:/var/lib/postgresql/data -B pgrun:/var/run/postgresql -e -C --env-file pg.env postgres.simg postgres
 ```
 
-5. To run a sample code to connect to POSTGRES. You can refer to the [postgres_test.py](postgres/postgres_test.py) file
+5. Run the container
+```bash
+singularity run instance://postgres &
+```
+
+6. To run a sample code to connect to POSTGRES. You can refer to the [postgres_test.py](postgres/postgres_test.py) file
 ```bash
 >module load conda
 >conda activate base #do this once
@@ -161,6 +166,12 @@ singularity run -B pgdata:/var/lib/postgresql/data -B pgrun:/var/run/postgresql 
 >source ~/envs/postgres_env/bin/activate
 >pip install -r $PWD/requirements.txt
 >python3 $PWD/postgres_test.py
+```
+
+7. When done, stop the postgres container instance.
+
+```bash
+singularity instance stop postgres
 ```
 ## MYSQL
 MySQL is an open-source relational database management system
@@ -190,10 +201,10 @@ singularity instance start --bind ${HOME} \
 4. Run the container startscript to initialize and start the MySQL server. Note that initialization is only done the first time and the script will automatically skip initialization if it is not needed. This command must be run each time the MySQL server is needed (e.g., each time the container is spun-up to provide the MySQL server).
 
 ```bash
-singularity run instance://mysql
+singularity run instance://mysql &
 ```
 
-5. Ensure you open a new terminal and ssh to the same node or use the ipaddress to connect to the node where the MySQL instance is running. A sample code to connect to MySQL, refer to the [mysql_test.py](mysql/mysql_test.py) file. Below are steps to run a python script to connect to a running MySQL instance. 
+5. A sample code to connect to MySQL, refer to the [mysql_test.py](mysql/mysql_test.py) file. Below are steps to run a python script to connect to a running MySQL instance. 
 ```bash
 >module load conda
 >conda activate base #do this once
@@ -206,6 +217,6 @@ singularity run instance://mysql
 6. When done, stop the MySQL container instance.
 
 ```bash
-singularity instance.stop mysql
+singularity instance stop mysql
 ```
 
