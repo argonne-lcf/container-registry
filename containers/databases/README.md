@@ -126,26 +126,31 @@ export PORT=7475 export PORT1=7687; ssh -L "localhost:${PORT}:localhost:${PORT}"
 PostgreSQL also known as Postgres, is a free and open-source relational database management system (RDBMS) emphasizing extensibility and SQL compliance.
 
 ### How to use Postgres on Polaris
-1. Pull container from Argonne GitHub container registry
+1. Pull container from docker
 ```bash
-singularity pull oras://ghcr.io/argonne-lcf/postgres:latest
+singularity pull docker://postgres
 ```
 
-2. Create a data and logs directory to bind to the running container
+2. Now create an environment file
 ```bash
-mkdir -p $PWD/data
+cat >> pg.env <<EOF
+export TZ=Asia/Kuala_Lumpurt
+export POSTGRES_USER=pguser
+export POSTGRES_PASSWORD=mypguser123
+export POSTGRES_DB=mydb
+export POSTGRES_INITDB_ARGS="--encoding=UTF-8"
+EOF
 ```
 
-3. Create a persistent overlay for the container. A persistent overlay is a directory or file system image that “sits on top” of your immutable SIF container. When you install new software or create and modify files the overlay will store the changes.
+3. Create a data and run directory to bind to the running container
 ```bash
-singularity overlay create --size 1024 overlay.img #Do this once
+mkdir pgdata
+mkdir pgrun
 ```
 
 4. Run the container
 ```bash
-singularity instance start --bind $PWD/data:/var/lib/postgresql/data --overlay overlay.img postgres_latest.sif postgres
-INFO:    instance started successfully
-singularity instance list
+singularity run -B pgdata:/var/lib/postgresql/data -B pgrun:/var/run/postgresql -e -C --env-file pg.env postgres.simg
 ```
 
 5. To run a sample code to connect to POSTGRES. You can refer to the [postgres_test.py](postgres/postgres_test.py) file

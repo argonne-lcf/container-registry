@@ -2,9 +2,9 @@ import psycopg2
 
 # Establish a connection to the database
 conn = psycopg2.connect(
-    database="postgres",
-    user="admin",
-    password="adminpwd123",
+    database="mydb",
+    user="pguser",
+    password="mypguser123",
     host="localhost",
     port="5432"
 )
