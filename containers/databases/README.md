@@ -1,13 +1,13 @@
 # Databases
 
 Two ways to use databases on Polaris, you can either pull an image from a repository or build images from scratch on a compute node.
-For the latter you will need a .def file and land on a compute node by setting the singularity_fakeroot flag to true.
+For the latter you will need a .def file and request a compute node using qsub by setting the singularity_fakeroot flag to true.
 
 ```bash
 qsub -I -A <project_name> -q debug -l select=1 -l walltime=60:00 -l singularity_fakeroot=true -l filesystems=home:eagle:grand
 ```
 
-We provide singularity containers and steps to interact with database containers on Polaris. To use this you will have to load singularity module and set the proxy.
+We provide singularity containers and steps to interact with database containers on Polaris. To use this you will have to load singularity module and set the proxy on the compute/login node.
 ```bash
 module load singularity
 #For compute nodes set proxy variable
@@ -128,13 +128,12 @@ PostgreSQL also known as Postgres, is a free and open-source relational database
 ### How to use Postgres on Polaris
 1. Pull container from docker
 ```bash
-singularity pull docker://postgres
+singularity pull --name postgres.simg docker://postgres
 ```
 
 2. Now create an environment file
 ```bash
 cat >> pg.env <<EOF
-export TZ=Asia/Kuala_Lumpurt
 export POSTGRES_USER=pguser
 export POSTGRES_PASSWORD=mypguser123
 export POSTGRES_DB=mydb
@@ -150,7 +149,7 @@ mkdir pgrun
 
 4. Start an instance of the container
 ```bash
-singularity instance start -B pgdata:/var/lib/postgresql/data -B pgrun:/var/run/postgresql -e -C --env-file pg.env postgres.simg postgres
+singularity instance start -B pgdata:/var/lib/postgresql/data -B pgrun:/var/run/postgresql postgres.simg postgres
 ```
 
 5. Run the container
