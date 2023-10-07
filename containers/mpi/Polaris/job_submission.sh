@@ -36,7 +36,7 @@ export SINGULARITYENV_LD_LIBRARY_PATH="$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH:$A
 #mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN singularity exec -B /opt -B /var/run/palsd/ $CONTAINER ldd /usr/source/mpi_hello_world
 
 echo C++ MPI
-mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN singularity exec -B /opt -B /var/run/palsd/ $CONTAINER /usr/source/mpi_hello_world
+mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN singularity exec -B /opt/nvidia -B /var/run/palsd/ -B /opt/cray/pe -B /opt/cray/libfabric $CONTAINER /usr/source/mpi_hello_world
 
 echo Python MPI
-mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN singularity exec -B /opt -B /var/run/palsd/ $CONTAINER python3 /usr/source/mpi_hello_world.py
+mpiexec -hostfile $PBS_NODEFILE -n $PROCS -ppn $PPN singularity exec -B /opt/nvidia -B /var/run/palsd/ -B /opt/cray/pe -B /opt/cray/libfabric $CONTAINER python3 /usr/source/mpi_hello_world.py
