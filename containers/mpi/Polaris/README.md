@@ -134,10 +134,10 @@ NGPUS=$((${NNODES}*${NGPU_PER_NODE}))
 echo "NUM_OF_NODES= ${NNODES} TOTAL_NUM_GPUS= ${NGPUS} GPUS_PER_NODE= ${NGPU_PER_NODE}"
 ```
 
-It's unnecessary for your code to be integrated into the image. Simply direct to the code you intend to run, and the container will recognize it at runtime. For instance, I transferred a CUDA-aware Python [cuda aware mpi example](source/mpi_cuda_aware_hello_world.py) code into a source directory. I employed -B $PWD to indicate the Python code.
+It's unnecessary for your code to be integrated into the image. Simply direct to the code you intend to run, and the container will recognize it at runtime. For instance, I transferred a CUDA-aware Python [cuda aware mpi example](source/mpi_cuda_aware_hello_world.py) code into a source directory. I employed `-B $PWD` to indicate the Python code.
 
 ```bash
-mpiexec -hostfile $PBS_NODEFILE -n $NGPUS -ppn $NGPU_PER_NODE singularity exec -B /opt/nvidia -B /var/run/palsd/ -B /opt/cray/pe -B /opt/cray/libfabric $CONTAINER python3 -B $PWD $CONTAINER python3 $PWD/source/mpi_cuda_aware_hello_world.py
+mpiexec -hostfile $PBS_NODEFILE -n $NGPUS -ppn $NGPU_PER_NODE singularity exec -B /opt/nvidia -B /var/run/palsd/ -B /opt/cray/pe -B /opt/cray/libfabric -B $PWD $CONTAINER python3 $PWD/source/mpi_cuda_aware_hello_world.py
 ```
 
 If executed on a single node, the output should appear as:
@@ -163,6 +163,7 @@ Results: [[0 0 0 0 0 0 0 0 0 0]
  [2 2 2 2 2 2 2 2 2 2]
  [3 3 3 3 3 3 3 3 3 3]]
 ```
-> :Note: Bootstrap by utilizing the [published images] as foundational images to create your personalized containers on Polaris.
-> For commonly encountered issues, consult the [troubleshooting](https://docs.alcf.anl.gov/polaris/data-science-workflows/containers/containers/#troubleshooting) section in ALCF documentation.
+> [!IMPORTANT] 
+> * Bootstrap by utilizing the [published images](https://github.com/orgs/argonne-lcf/packages) as foundational images to create your personalized containers on Polaris.
+> * For commonly encountered issues, consult the [troubleshooting](https://docs.alcf.anl.gov/polaris/data-science-workflows/containers/containers/#troubleshooting) section in ALCF documentation.
 
