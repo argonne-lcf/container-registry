@@ -1,7 +1,7 @@
 # MPI on Polaris using Singularity
 This guide provides steps to build and run a container using MPICH on Polaris. It also includes an example with CUDA-aware MPI for scaling on the A100 GPUs.
 
-# Fetching an NVIDIA image
+## Fetching an exisiting NVIDIA image
 
 ```bash
 ml use /soft/modulefiles
@@ -27,7 +27,7 @@ export https_proxy=http://proxy.alcf.anl.gov:3128
 apptainer pull docker://nvcr.io/nvidia/cuquantum-appliance:24.08-x86_64
 ```
 
-# Compiling C code on host
+## Compiling C code on host
 
 ```bash
 #include <mpi.h>
@@ -48,7 +48,7 @@ cc mpi_hello_world.c -o mpi_hello
 To compile C++ on host, see [example](https://github.com/argonne-lcf/GettingStarted/tree/master/ProgrammingModels/Polaris/CUDA/vecadd_mpi#compilation-with-nvidia-compilers)
 
 
-# Running C code against container environment
+## Running C code and python against container environment
 
 ```bash
 CONTAINER=cuquantum-appliance_24.08-x86_64.sif 
