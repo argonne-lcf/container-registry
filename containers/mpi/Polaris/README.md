@@ -1,7 +1,7 @@
 # MPI on Polaris using Singularity
 This guide provides steps to build and run a container using MPICH on Polaris. It also includes an example with CUDA-aware MPI for scaling on the A100 GPUs.
 
-## Fetching an exisiting NVIDIA image
+## Fetching an existing NVIDIA image
 
 ```bash
 ml use /soft/modulefiles
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 cc mpi_hello_world.c -o mpi_hello 
 ```
 
-To compile C++ on host, see [example](https://github.com/argonne-lcf/GettingStarted/tree/master/ProgrammingModels/Polaris/CUDA/vecadd_mpi#compilation-with-nvidia-compilers)
+To compile C++ on host and run affinity, see [example]([https://github.com/argonne-lcf/GettingStarted/tree/master/ProgrammingModels/Polaris/CUDA/vecadd_mpi#compilation-with-nvidia-compilers](https://github.com/argonne-lcf/GettingStarted/tree/master/Examples/Polaris/affinity_omp))
 
 
 ## Running C code and python against container environment
@@ -58,4 +58,19 @@ mpiexec -np 4 apptainer exec     -B $PWD     -B /opt/cray     -B /opt/nvidia/hpc
 
 # Run Python Code
 mpiexec -np 4 apptainer exec     -B $PWD     -B /opt/cray     -B /opt/nvidia/hpc_sdk -B /usr/lib64:/hostlib64  -B /var/run/palsd --env LD_LIBRARY_PATH=/opt/cray/pe/mpich/8.1.28/ofi/nvidia/23.3/lib:/opt/cray/libfabric/1.15.2.0/lib64:/opt/cray/pe/pmi/6.1.13/lib:/opt/cray/pals/1.3.4/lib:/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/compilers/lib:/hostlib64 --nv --fakeroot $CONTAINER python3 $PWD/source/numba_hello_world.py
+```
+
+## Bootstrapping - Building a container from a def file
+
+See [lolcow.def](./lolcow.def) for a simple def file.
+
+```bash
+apptainer build --fakeroot lolcow.sif lolcow.def
+```
+
+## Running the custom def file
+
+```bash
+CONTAINER=lolcow.sif
+mpiexec -np 4 apptainer exec     -B $PWD     -B /opt/cray     -B /opt/nvidia/hpc_sdk -B /usr/lib64:/hostlib64  -B /var/run/palsd --env LD_LIBRARY_PATH=/opt/cray/pe/mpich/8.1.28/ofi/nvidia/23.3/lib:/opt/cray/libfabric/1.15.2.0/lib64:/opt/cray/pe/pmi/6.1.13/lib:/opt/cray/pals/1.3.4/lib:/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/compilers/lib:/hostlib64:/opt/cray/pe/lib64 --nv --fakeroot $CONTAINER $PWD/source/mpi_hello
 ```
