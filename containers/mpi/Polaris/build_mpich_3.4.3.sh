@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MPICH_VERSION="4.0.2"
+MPICH_VERSION="3.4.3"
 MPICH_MAKE_OPTIONS="-j 4" # Assuming 4 cores, adjust if needed
 
 # Exit on error
@@ -17,8 +17,10 @@ cd mpich_src
 
 echo "--- Configuring MPICH ---"
 # Pass options directly to configure, avoid shell variable expansion issues
-./configure --prefix=/mpich/install \
-            --disable-wrapper-rpath \
+./configure --prefix=/mpich/install --with-device=ch4:ofi \
+	    --disable-wrapper-rpath \
+	    --enable-shared \
+	    --enable-threads=multiple \
             FFLAGS='-O3 -fallow-argument-mismatch' \
             FCFLAGS='-O3 -fallow-argument-mismatch' \
             CFLAGS='-O3' \
@@ -41,9 +43,9 @@ export LD_LIBRARY_PATH=/mpich/install/lib:$LD_LIBRARY_PATH
 echo "--- Verifying mpicc Path ---"
 echo "$(which mpicc)"
 
-echo "--- Installing mpi4py ---"
+#echo "--- Installing mpi4py ---"
 # Ensure pip uses the correct MPI environment
-MPICC=$(which mpicc) MPICXX=$(which mpicxx) pip install mpi4py
+#MPICC=$(which mpicc) MPICXX=$(which mpicxx) pip install mpi4py
 
 #### BUILD FILES ####
 # Ensure the source file exists before trying to compile
