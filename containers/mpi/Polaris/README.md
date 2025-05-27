@@ -16,7 +16,7 @@ ml load e2fsprogs
 module unload darshan
 module unload xalt
 
-# Do not need for Hybrid MPI mode, and needed for Native mode
+# Do not need for Native MPI mode, and needed for Hybrid mode
 # module load cray-mpich-abi
 
 # Configure Apptainer temporary and cache directories (IMPORTANT for Polaris)
